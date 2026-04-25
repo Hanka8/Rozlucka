@@ -291,6 +291,48 @@
         margin: 16px 0;
       }
 
+      .route-picker {
+        margin: 18px 0 10px;
+      }
+
+      .route-label {
+        font-family: "Special Elite", serif;
+        font-size: 10px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--border);
+        margin-bottom: 8px;
+      }
+
+      .route-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .route-btn {
+        flex: 1;
+        border: 2px solid var(--ink);
+        background: var(--paper);
+        color: var(--ink);
+        font-family: "Courier Prime", monospace;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        padding: 10px 12px;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          color 0.2s,
+          border-color 0.2s;
+      }
+
+      .route-btn.active,
+      .route-btn:hover {
+        background: var(--ink);
+        color: var(--paper);
+        border-color: var(--green);
+      }
+
       /* === TASKS === */
       .section-title {
         font-family: "Special Elite", serif;
@@ -474,7 +516,7 @@
             Spis č. BR-2024 / Klasifikace: Rozlučkový provoz
           </div>
           <div class="title">Přísně tajná<br />brněnská mise</div>
-          <div class="subtitle">Nely terénní příručka · Brno · 25. dubna</div>
+          <div class="subtitle">Nely terénní příručka · Brno · 24. dubna</div>
         </div>
 
         <!-- COUNTDOWN -->
@@ -502,6 +544,14 @@
           </div>
         </div>
 
+        <div class="route-picker">
+          <div class="route-label">Vyber trasu</div>
+          <div class="route-buttons">
+            <button class="route-btn" data-route="zoo">Zoo</button>
+            <button class="route-btn" data-route="art">Umění</button>
+          </div>
+        </div>
+
         <div class="progress-section">
           Stav mise: <span id="done-count">0</span> /
           <span id="total-count">0</span> úkolů splněno
@@ -520,7 +570,7 @@
         </div>
 
         <hr class="divider" />
-        <div class="section-title">// Terénní úkoly //</div>
+        <div class="section-title" id="route-title">// Terénní úkoly //</div>
 
         <ul class="tasks" id="task-list"></ul>
 
@@ -539,7 +589,7 @@
           tag: "Holubí záchranná akce",
         },
         {
-          emoji:"❤️",
+          emoji: "❤️",
           text: "Kdykoliv zmíníš Dalibora, použij místo jeho jména trapnou zaláskovanou přezdívku, např. Lasi, Medvídek, Miláčeček, Princátko.",
           tag: "Cringe",
         },
@@ -548,14 +598,14 @@
           text: "V nejbližší trafice kup dnešní (nebo datem nejbližší) noviny, stoupni si ven, hlasitě čti titulky a nabízej prodej novin za dvacet korun.",
           tag: "Oliver Twist",
         },
-         {
+        {
           emoji: "🏙️",
           text: "Nejsou sami, drží partu, stojí pěkně spolu, každý z nich má hřebínek a pyšnou hlavu dolů. Pivo tam teče, smích se line ven, víš, jak se to místo jmenuje jen?",
           tag: "Brněnská rarita",
         },
         {
           emoji: "🍹",
-          text: "Pozvi kamarády (ornitoložku případně) na panáka.",
+          text: "Pozvi kamarády na panáka.",
           tag: "Klasika",
         },
         {
@@ -630,7 +680,76 @@
         },
       ];
 
+      const ZOO_ONLY_TASKS = [
+        {
+          emoji: "💡",
+          text: "Vyfoť se s wombatem.",
+          tag: "Hledej",
+        },
+        {
+          emoji: "🚋",
+          text: "Vyfoť se se zvířetem, které vypadá nejvíc jako Dalibor.",
+          tag: "Dvojník Dalibora",
+        },
+        {
+          emoji: "🍌",
+          text: "Najdi zvíře v kontaktní zoo. Oslovuj ho 10 minut jako Dalibor.",
+          tag: "Kontaktní terapie",
+        },
+        {
+          emoji: "📸",
+          text: "Vyfoť se s manulem, musíš mít co nejpodobnější výraz jako on.",
+          tag: "Manulí mimika",
+        },
+        {
+          emoji: "🚋",
+          text: "Vyfoť se se zvířetem, které vypadá nejvíc jako Dalibor po 20 letech.",
+          tag: "Budoucnost",
+        },
+      ];
+      const ART_ONLY_TASKS = [
+        {
+          emoji: "🖼️",
+          text: "Najdi dílo, které by se dalo interpretovat jako zobrazení Dalibora. Může to být přímá podobizna, ale i abstraktní ztvárnění, které ti Dalibora připomíná. Vyfoť se u každého z nich a vysvětli, proč jsi si vybrala právě to dílo.",
+          tag: "Hledej Dalibora v umění",
+        },
+        {
+          emoji: "🎨",
+          text: "Najdi dílo, které by se dalo interpretovat jako zobrazení Dalibora za 20 let. Může to být přímá podobizna, ale i abstraktní ztvárnění, které ti připomíná, jak by mohl Dalibor vypadat za 20 let. Vyfoť se u každého z nich a vysvětli, proč jsi si vybrala právě to dílo.",
+          tag: "Budoucnost",
+        },
+        {
+          emoji: "🖌️",
+          text: "Najdeš v parku nebo na Obilném trhu libovolný objekt — odpadkový koš, lavičku, ceduli — a skupině ho odprezéntuješ jako klíčové dílo letošního Brno Art Week. ",
+          tag: "Umění mezi námi",
+        },
+        {
+          emoji: "🖼️",
+          text: "Nafoť se v galerii co nejvíc umělecky. Inspiruj se vystavovanými díly a jejich atmosférou. Můžeš pózovat, napodobovat, improvizovat.",
+          tag: "Umělecké selfie",
+        },
+        {
+          emoji: "🎭",
+          text: "Udělej storíčko z výstavy.",
+          tag: "Instagram",
+        },
+      ];
+
+      const ZOO_TASKS = TASKS.concat(ZOO_ONLY_TASKS).map((task) => ({
+        ...task,
+      }));
+      const ART_TASKS = TASKS.concat(ART_ONLY_TASKS).map((task) => ({
+        ...task,
+      }));
+
+      const ROUTES = {
+        zoo: { label: "Zoo", tasks: ZOO_TASKS },
+        art: { label: "Umělecké výstavy", tasks: ART_TASKS },
+      };
+
       const STORAGE_KEY = "rozlucka_done_v2";
+      const ROUTE_KEY = "rozlucka_route_v2";
+      const DEFAULT_ROUTE = "zoo";
       // Reveal target: 25 April 2026 at 10:00 local time
       const TARGET = new Date("2026-04-25T10:00:00");
 
@@ -649,22 +768,57 @@
         }
       }
 
-      function saveState(state) {
+      function saveState() {
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         } catch (e) {}
       }
 
       let state = loadState();
+      let currentRoute = loadRoute();
 
-      // --- Render tasks ---
       const list = document.getElementById("task-list");
+      const routeButtons = document.querySelectorAll(".route-btn");
+      const routeTitle = document.getElementById("route-title");
 
-      TASKS.forEach((t, i) => {
-        const done = !!state[i];
-        const li = document.createElement("li");
-        li.className = "task-item" + (done ? " done" : "");
-        li.innerHTML = `
+      routeButtons.forEach((btn) => {
+        btn.addEventListener("click", () => setRoute(btn.dataset.route));
+      });
+
+      function loadRoute() {
+        try {
+          const r = localStorage.getItem(ROUTE_KEY);
+          return r && ROUTES[r] ? r : DEFAULT_ROUTE;
+        } catch (e) {
+          return DEFAULT_ROUTE;
+        }
+      }
+
+      function saveRoute(route) {
+        try {
+          localStorage.setItem(ROUTE_KEY, route);
+        } catch (e) {}
+      }
+
+      function getRouteState() {
+        if (!state[currentRoute]) state[currentRoute] = {};
+        return state[currentRoute];
+      }
+
+      function renderTasks() {
+        list.innerHTML = "";
+        const route = ROUTES[currentRoute];
+        routeTitle.textContent = `// Terénní úkoly – ${route.label} //`;
+        routeButtons.forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.route === currentRoute);
+        });
+
+        route.tasks.forEach((t, i) => {
+          const routeState = getRouteState();
+          const done = !!routeState[i];
+          const li = document.createElement("li");
+          li.className = "task-item" + (done ? " done" : "");
+          li.innerHTML = `
     <div class="task-num">${String(i + 1).padStart(2, "0")}.</div>
     <div class="task-checkbox"><span class="checkmark">✓</span></div>
     <div class="task-body">
@@ -673,20 +827,25 @@
       <span class="task-tag">${t.tag}</span>
     </div>
   `;
-        li.addEventListener("click", () => toggleTask(i, li));
-        list.appendChild(li);
-      });
+          li.addEventListener("click", () => toggleTask(i, li));
+          list.appendChild(li);
+        });
+
+        updateProgress();
+      }
 
       function toggleTask(i, li) {
-        state[i] = !state[i];
-        saveState(state);
-        li.classList.toggle("done", !!state[i]);
+        const routeState = getRouteState();
+        routeState[i] = !routeState[i];
+        saveState();
+        li.classList.toggle("done", !!routeState[i]);
         updateProgress();
       }
 
       function updateProgress() {
-        const done = Object.values(state).filter(Boolean).length;
-        const total = TASKS.length;
+        const routeState = getRouteState();
+        const done = Object.values(routeState).filter(Boolean).length;
+        const total = ROUTES[currentRoute].tasks.length;
         const pct = Math.round((done / total) * 100);
         document.getElementById("done-count").textContent = done;
         document.getElementById("total-count").textContent = total;
@@ -696,8 +855,14 @@
           done === total ? "block" : "none";
       }
 
-      document.getElementById("total-count").textContent = TASKS.length;
-      updateProgress();
+      function setRoute(route) {
+        if (!ROUTES[route] || route === currentRoute) return;
+        currentRoute = route;
+        saveRoute(route);
+        renderTasks();
+      }
+
+      renderTasks();
 
       // --- Countdown ---
       function pad(n) {
