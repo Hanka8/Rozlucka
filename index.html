@@ -846,13 +846,13 @@
         const routeState = getRouteState();
         const done = Object.values(routeState).filter(Boolean).length;
         const total = ROUTES[currentRoute].tasks.length;
-        const pct = Math.round((done / total) * 100);
+        const pct = Math.round((Math.min(done, 16) / 16) * 100);
         document.getElementById("done-count").textContent = done;
         document.getElementById("total-count").textContent = total;
         document.getElementById("progress-fill").style.width = pct + "%";
         document.getElementById("progress-pct").textContent = pct + " %";
         document.getElementById("congrats").style.display =
-          done === total ? "block" : "none";
+          done >= 16 ? "block" : "none";
       }
 
       function setRoute(route) {
